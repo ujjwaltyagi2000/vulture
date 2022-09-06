@@ -27,7 +27,6 @@ def encode_faces(folder):
           print(len(fr.face_encodings(known_img)))
 
           list_people_encoding.append((known_encoding, filename))
-          print(list_people_encoding)
 
      return list_people_encoding
 
