@@ -1,20 +1,12 @@
-print('''__      ___    _ _   _______ _    _ _____  ______ 
- \ \    / / |  | | | |__   __| |  | |  __ \|  ____|
-  \ \  / /| |  | | |    | |  | |  | | |__) | |__   
-   \ \/ / | |  | | |    | |  | |  | |  _  /|  __|  
-    \  /  | |__| | |____| |  | |__| | | \ \| |____ 
-     \/    \____/|______|_|   \____/|_|  \_\______''')
-
-import face_recognition as fr
-import matplotlib.pyplot as plt
-from tkinter import Tk
 from tkinter.filedialog import askopenfilename # We will use this to give user the option to browse the image file
-import numpy as np
+import face_recognition as fr
+from tkinter import Tk
 import cv2
 import os # will help find file directories
 
 # which file to analyse:
 Tk().withdraw()
+
 load_image = askopenfilename()
 
 target_image = fr.load_image_file(load_image) # image file to be analyzed
@@ -24,6 +16,7 @@ target_encoding = fr.face_encodings(target_image)
 
 # Searches for occurrences of this face:
 def encode_faces(folder):
+     
      list_people_encoding = []
 
      for filename in os.listdir(folder):
@@ -31,11 +24,14 @@ def encode_faces(folder):
           known_img = fr.load_image_file(f'{folder}{filename}')
           known_encoding = fr.face_encodings(known_img)[0]
 
+          print(len(fr.face_encodings(known_img)))
+
           list_people_encoding.append((known_encoding, filename))
+          print(list_people_encoding)
 
      return list_people_encoding
 
-
+# print(encode_faces())
 
 def find_target_face():
 
