@@ -36,12 +36,12 @@ def find_target_face():
 
      face_location = fr.face_locations(target_image)
 
-     for person in encode_faces('dataset/'):
+     for person in encode_faces('face-rec-v1\dataset/'):
 
           encoded_face = person[0]
           filename = person[1]
 
-          is_target_face = fr.compare_faces(encoded_face, target_encoding, tolerance = 0.55)
+          is_target_face = fr.compare_faces(encoded_face, target_encoding, tolerance = 0.7)
 
           print(f'{is_target_face} {filename}')
 
