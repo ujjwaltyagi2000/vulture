@@ -1,20 +1,26 @@
 from deepface import DeepFace
-import matplotlib.pyplot as plt
+import cv2
 
-img_1_path = r"D:\Projects\Python\vulture\deepface\dataset/img1.jpg"
-img_2_path = r"D:\Projects\Python\vulture\deepface\dataset/img2.jpg"
+img_1_path = r"deepface\my-face-data\training-dataset/ujjwal.jpeg"
+img_2_path = r"deepface\my-face-data\testing-dataset/y.jpg"
 
-model_name = 'Facenet'
+img1 = cv2.imread(img_1_path)
+img2 = cv2.imread(img_2_path)
+
+window_name = 'image'
+
+cv2.imshow(window_name, img1)
+cv2.imshow(window_name, img2)
+cv2.waitKey(0)
+
+model_name = 'VGG-Face'
 
 response = DeepFace.verify(img1_path=img_1_path, img2_path=img_2_path, model_name=model_name)
-# If model name isn't passed, VGG-Face is set as the default model
-# Multiple stages of verification are taking place in the back-end of this verify() function
 
 print(response)
 
-# Let's see what those stages are and how it works:
-img1 = DeepFace.detectFace(img_1_path)
-img2 = DeepFace.detectFace(img_2_path)
+df = DeepFace.find(img_path = img_1_path, db_path = r"deepface\my-face-data\testing-dataset/")
+print(df.head())
 
 
 
