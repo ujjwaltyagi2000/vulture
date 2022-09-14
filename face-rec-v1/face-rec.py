@@ -1,3 +1,4 @@
+from fileinput import filename
 from tkinter.filedialog import askopenfilename # We will use this to give user the option to browse the image file
 import face_recognition as fr
 from tkinter import Tk
@@ -11,8 +12,6 @@ load_image = askopenfilename()
 
 target_image = fr.load_image_file(load_image) # image file to be analyzed
 target_encoding = fr.face_encodings(target_image)
-
-
 
 # Searches for occurrences of this face:
 def encode_faces(folder):
@@ -36,12 +35,13 @@ def find_target_face():
 
      face_location = fr.face_locations(target_image)
 
-     for person in encode_faces('face-rec-v1\dataset/'):
+     for person in encode_faces(r"face-rec-v1\testing-dataset/"): # always specify path as r"path" to avoid errors
+          # encoded_faces() returns face encoding and filename. So person[0] --> encoding, person[1] --> filename
 
           encoded_face = person[0]
           filename = person[1]
 
-          is_target_face = fr.compare_faces(encoded_face, target_encoding, tolerance = 0.7)
+          is_target_face = fr.compare_faces(encoded_face, target_encoding, tolerance = 0.6)
 
           print(f'{is_target_face} {filename}')
 
@@ -52,7 +52,6 @@ def find_target_face():
                     if is_target_face[face_number]:
                          label = filename
                          create_frame(location, label)
-
                     face_number += 1
 
 def create_frame(location, label):
