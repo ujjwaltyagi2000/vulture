@@ -41,7 +41,7 @@ def find_target_face():
           encoded_face = person[0]
           filename = person[1]
 
-          is_target_face = fr.compare_faces(encoded_face, target_encoding, tolerance = 0.6)
+          is_target_face = fr.compare_faces(encoded_face, target_encoding, tolerance = 0.65)
 
           print(f'{is_target_face} {filename}')
 
