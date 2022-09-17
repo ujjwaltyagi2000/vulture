@@ -23,7 +23,7 @@ def encode_faces(folder):
           known_img = fr.load_image_file(f'{folder}{filename}')
           known_encoding = fr.face_encodings(known_img)[0]
 
-          print(len(fr.face_encodings(known_img)))
+          # print(len(fr.face_encodings(known_img)))
 
           list_people_encoding.append((known_encoding, filename))
 
@@ -41,7 +41,7 @@ def find_target_face():
           encoded_face = person[0]
           filename = person[1]
 
-          is_target_face = fr.compare_faces(encoded_face, target_encoding, tolerance = 0.65)
+          is_target_face = fr.compare_faces(encoded_face, target_encoding, tolerance = 0.6)
 
           print(f'{is_target_face} {filename}')
 
