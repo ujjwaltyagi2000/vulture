@@ -40,21 +40,10 @@ for i in range(len(face_locations)):
     copy =  cv2.rectangle(copy, (x1, y1), (x2, y2), (255,0,255), 2)
 
     crop_img = image[y1:y2, x1:x2]
-    # new_coordinates = [x1, y1, x2, y2]
-    # print(new_coordinates)
 
-    cv2.imshow("Crop", crop_img)
-    cv2.waitKey(0)
-
-    
-    # cv2.imwrite(os.path.join(path , f"chehra{i}.jpeg"), crop_img)
+    cv2.imwrite(os.path.join(path , f"chehra{i+1}.jpeg"), crop_img)
 
 
 cv2.imshow("Original", image)
 cv2.imshow("Faces", copy)
-# new_coordinates = [x1, y1, x2, y2]
-# print(f"New coordinates = {new_coordinates}")
-# crop_img = image[y1:y2, x1:x2]
-# cv2.imwrite()
-
 cv2.waitKey(0)
