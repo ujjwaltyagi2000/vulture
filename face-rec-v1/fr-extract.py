@@ -23,30 +23,27 @@ for i in range(len(face_locations)):
     # 3 --> top left --> -100
 
     new_coordinates = [x1, y1, x2, y2]
-    x1 = min(x1,width)
-    x2 = min(x2,width)
-    y1 = min(y1,height)
-    y2 = min(y2,height)
 
     print(new_coordinates)
-
-    for cord in new_coordinates:
-        print(cord)
-        
-        if cord == 0:
-            cord = cord + abs(cord) + 5
-
-        
     
+    x1 = max(0, x1)
+    x1 = min(x1,width)
+    x2 = max(0, x2)
+    x2 = min(x2,width)
+    y1 = max(0, y1)
+    y1 = min(y1,height)
+    y2 = max(0, y2)
+    y2 = min(y2,height)
+    
+    print(x1, y1, x2, y2)
     
     copy =  cv2.rectangle(copy, (x1, y1), (x2, y2), (255,0,255), 2)
 
     crop_img = image[y1:y2, x1:x2]
-    print(type(crop_img))
     # new_coordinates = [x1, y1, x2, y2]
     # print(new_coordinates)
 
-    # cv2.imshow("Crop", crop_img)
+    cv2.imshow("Crop", crop_img)
     cv2.waitKey(0)
 
     
