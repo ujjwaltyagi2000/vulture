@@ -4,7 +4,7 @@ import cv2
 import os
 
 image = fr.load_image_file(r"face-rec-v1\testing-dataset\aum.jpeg")
-height, width, channels= image.shape
+height, width = image.shape[0], image.shape[1]
 
 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 copy=image.copy()
@@ -16,7 +16,7 @@ print(face_locations)
 
 for i in range(len(face_locations)):
 
-    x1, y1, x2, y2 = face_locations[i][3]-100, face_locations[i][0]-100, face_locations[i][1]+100, face_locations[i][2]+100
+    x1, y1, x2, y2 = face_locations[i][3]-150, face_locations[i][0]-250, face_locations[i][1]+150, face_locations[i][2]+150
     # 0 --> top left --> -100 
     # 1 --> top right -->+100
     # 2 --> top right -->-100
