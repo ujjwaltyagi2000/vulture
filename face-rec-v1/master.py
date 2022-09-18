@@ -1,6 +1,4 @@
-# from retinaface import RetinaFace as rf
 from deepface import DeepFace as df
-import matplotlib.pyplot as plt
 import face_recognition as fr
 import cv2
 import os
@@ -8,6 +6,12 @@ import os
 # PATHS:
 faces_path = r"face-rec-v1\detected-faces"
 training_img_path = r"face-rec-v1\training-dataset\ujjwal.jpeg"
+testing_img_path = r"face-rec-v1\testing-dataset\aum.jpeg"
+
+# Image Labels:
+training_label = "Training Image"
+testing_label = "Testing Image"
+matched_face_label = "Matched Face"
 
 # Face extraction from group photo:
 def extract_faces(image):
@@ -55,10 +59,11 @@ def extract_faces(image):
         cv2.imwrite(os.path.join(path , f"chehra{i+1}.jpeg"), crop_img)
 
 # showing image:
-def show_face(image):
+def disp_img(path, label):
 
-    cv2.imshow('Face',image)
-    cv2.waitKey(2000)
+    image = cv2.imread(path)
+    cv2.imshow(label, image) 
+    cv2.waitKey(2000)   
 
 # counting images in a directory:
 def count_files(directory):
@@ -68,7 +73,6 @@ def count_files(directory):
         if os.path.isfile(os.path.join(directory, path)):
             count += 1
 
-    print(count)
     return count
 
 # verification using face_recognition:
@@ -79,10 +83,10 @@ def fr_verify():
 def df_verify():
     
     model_name = 'VGG-Face'
+
+    min_distance = 1
     
-    # files = count_files(path) --> multiple images can be loaded like this using an iteration from 1-files
-    
-    image = fr.load_image_file(r"face-rec-v1\testing-dataset\aum.jpeg") 
+    image = fr.load_image_file(testing_img_path) 
     extract_faces(image)
 
     files = count_files(faces_path) # multiple images can be loaded from this using an iteration from 1-files
@@ -91,10 +95,25 @@ def df_verify():
 
         face_path = os.path.join(faces_path , f"chehra{i+1}.jpeg")
 
-        response = df.verify(img1_path=face_path, img2_path=training_img_path, model_name=model_name)
+        response = df.verify(img1_path=face_path, img2_path=training_img_path, model_name=model_name, prog_bar = True)
         print(response)
+        
+        if response['verified'] == True and min_distance>response['distance']:
+
+            min_distance = response['distance']
+
+            true_face_index = i
+
+    return true_face_index      
     
 print("Vulture Initiating........")
-df_verify()
 
+face_index = df_verify()
 
+disp_img(training_img_path, training_label)
+disp_img(testing_img_path, testing_label)
+
+matched_face_path = os.path.join(faces_path , f"chehra{face_index+1}.jpeg")
+disp_img(matched_face_path, matched_face_label)
+
+cv2.destroyAllWindows()
