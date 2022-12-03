@@ -3,7 +3,7 @@ from deepface import DeepFace as df
 import cv2
 import os
 
-image = fr.load_image_file(r"face-rec-v1\testing-dataset\aum.jpeg")
+image = fr.load_image_file(r"testing-dataset\au2.jpeg")
 height, width = image.shape[0], image.shape[1]
 
 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -16,7 +16,8 @@ print(face_locations)
 
 for i in range(len(face_locations)):
 
-    x1, y1, x2, y2 = face_locations[i][3]-150, face_locations[i][0]-250, face_locations[i][1]+150, face_locations[i][2]+150
+    # x1, y1, x2, y2 = face_locations[i][3]-100, face_locations[i][0]-200, face_locations[i][1]+100, face_locations[i][2]+100
+    x1, y1, x2, y2 = face_locations[i][3], face_locations[i][0], face_locations[i][1], face_locations[i][2]
     # 0 --> top left --> -100 
     # 1 --> top right -->+100
     # 2 --> top right -->-100
@@ -43,7 +44,15 @@ for i in range(len(face_locations)):
 
     cv2.imwrite(os.path.join(path , f"chehra{i+1}.jpeg"), crop_img)
 
+cv2.namedWindow("Original", cv2.WINDOW_NORMAL)
 
+cv2.resizeWindow("Original", 1200, 900)
+# Displaying the image
 cv2.imshow("Original", image)
+
+
+cv2.namedWindow("Faces", cv2.WINDOW_NORMAL)
+
+cv2.resizeWindow("Faces", 1200, 900)
 cv2.imshow("Faces", copy)
 cv2.waitKey(0)
