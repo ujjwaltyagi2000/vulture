@@ -1,12 +1,17 @@
 from deepface import DeepFace as df
 import face_recognition as fr
+from tkinter import filedialog
 import cv2
 import os
 
 # paths:
 faces_path = r"detected-faces"
-training_img_path = r"training-dataset\ujjwal.jpeg"
-testing_img_path = r"testing-dataset\p2.jpg"
+training_img_path = r"training-dataset\anshuman.jpg"
+testing_img_path = r"testing-dataset\p7.jpg"
+
+# models and metrics:
+models = ['VGG-Face', 'Facenet', 'OpenFace', 'DeepFace', 'DeepID', 'Dlib', 'ArcFace']
+metrics = ['cosine', 'euclidean', 'euclidean_l2']
 
 # image Labels:
 training_label = "Training Image"
@@ -111,7 +116,9 @@ def fr_verify():
 # verification using DeepFace
 def df_verify():
     
-    model_name = 'VGG-Face'
+    model = models[0]
+
+    metric = metrics[0]
 
     min_distance = 1
 
@@ -126,7 +133,7 @@ def df_verify():
 
         face_path = os.path.join(faces_path , f"face{i+1}.jpeg")
 
-        response = df.verify(img1_path=face_path, img2_path=training_img_path, model_name=model_name, prog_bar = True, enforce_detection=False)
+        response = df.verify(img1_path=face_path, img2_path=training_img_path, model_name=model, distance_metric=metric, prog_bar = True, enforce_detection=False)
         print(response)
         
         if response['verified'] == True and min_distance>response['distance']:
