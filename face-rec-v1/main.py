@@ -1,22 +1,11 @@
 from deepface import DeepFace as df
 import face_recognition as fr
-from tkinter import filedialog
+import tkinter as tk
+from tkinter.filedialog import askopenfile
+import time
 import cv2
 import os
 
-# paths:
-faces_path = r"detected-faces"
-training_img_path = r"training-dataset\anshuman.jpg"
-testing_img_path = r"testing-dataset\p7.jpg"
-
-# models and metrics:
-models = ['VGG-Face', 'Facenet', 'OpenFace', 'DeepFace', 'DeepID', 'Dlib', 'ArcFace']
-metrics = ['cosine', 'euclidean', 'euclidean_l2']
-
-# image Labels:
-training_label = "Training Image"
-testing_label = "Testing Image"
-matched_face_label = "Matched Face"
 
 # face extraction from group photo:
 def extract_faces(image):
@@ -94,10 +83,16 @@ def extract_faces(image):
 def disp_img(path, label):
 
     image = cv2.imread(path)
+    height, width = image.shape[0], image.shape[1]
+
+    if height>720 or width>1280:
+        height=int(height/2)
+        width=int(width/2)
+    
     cv2.namedWindow(label, cv2.WINDOW_NORMAL)
-    cv2.resizeWindow(label, 1000, 750)
+    cv2.resizeWindow(label, width, height)
     cv2.imshow(label, image)  
-    cv2.waitKey(2000)  
+    cv2.waitKey(10000)  
 
 # counting images in a directory:
 def count_files(directory):
@@ -123,6 +118,8 @@ def df_verify():
     min_distance = 1
 
     true_face_index = 0
+
+    is_a_match = False
     
     image = fr.load_image_file(testing_img_path) 
     extract_faces(image)
@@ -142,20 +139,55 @@ def df_verify():
 
             true_face_index = i
 
-    return true_face_index      
+            is_a_match = True
+
+    return true_face_index, is_a_match      
     
+# terminal screen:
 print("\n\nVulture Initiating........\n")
 
-face_index = df_verify()
+# paths:
+faces_path = r"detected-faces"
 
-disp_img(training_img_path, training_label)
-disp_img(testing_img_path, testing_label)
+file_types = [('jpg Files', '*.jpg'), ('png Files','*.png'), ('jpeg Files','*.jpeg')] 
 
-matched_face_path = os.path.join(faces_path , f"face{face_index+1}.jpeg")
-face_img = cv2.imread(matched_face_path)
-fm_height, fm_width = face_img.shape[0], face_img.shape[1]
-cv2.namedWindow(matched_face_label, cv2.WINDOW_NORMAL)
-cv2.resizeWindow(matched_face_label, fm_width, fm_height)
-cv2.imshow(matched_face_label, face_img)  
-cv2.waitKey(2000)  
-cv2.destroyAllWindows()
+print("\nSelect Training Image")
+time.sleep(2)
+training_img_path =  tk.filedialog.askopenfilename(filetypes=file_types)
+
+print("\nTraining Image Received")
+time.sleep(2)
+
+print("\nSelect Testing Image")
+time.sleep(2)
+testing_img_path = tk.filedialog.askopenfilename(filetypes=file_types)
+
+print("\nTesting Image Received")
+time.sleep(2)
+
+# models and metrics:
+models = ['VGG-Face', 'Facenet', 'OpenFace', 'DeepFace', 'DeepID', 'Dlib', 'ArcFace']
+metrics = ['cosine', 'euclidean', 'euclidean_l2']
+
+# image Labels:
+training_label = "Training Image"
+testing_label = "Testing Image"
+matched_face_label = "Matched Face"
+
+print("\nGenerating Results........\n")
+
+face_index, is_a_match = df_verify()
+
+if is_a_match:
+    
+    disp_img(training_img_path, training_label)
+    disp_img(testing_img_path, testing_label)
+
+    matched_face_path = os.path.join(faces_path , f"face{face_index+1}.jpeg")
+    disp_img(matched_face_path, matched_face_label) 
+
+    cv2.destroyAllWindows()
+
+else: 
+
+    print("\nIndividual not found in the photo!")
