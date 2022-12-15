@@ -1,55 +1,30 @@
 import cv2
-from tkinter import *
-from PIL import Image, ImageTk
 
+cam = cv2.VideoCapture(0)
 
-cam_on = False
-cap = None
-mainWindow = Tk()
+cv2.namedWindow("test")
 
+img_counter = 0
 
-mainFrame = Frame(mainWindow, height = 640, width = 810)
-mainFrame.place(x=350,y=0)
+while True:
+    ret, frame = cam.read()
+    if not ret:
+        print("failed to grab frame")
+        break
+    cv2.imshow("test", frame)
 
-cameraFrame = Frame(mainWindow, height = 640, width = 405)
-cameraFrame.place(x = 0, y = 0)
+    k = cv2.waitKey(1)
+    if k%256 == 27:
+        # ESC pressed
+        print("Escape hit, closing...")
+        break
+    elif k%256 == 32:
+        # SPACE pressed
+        img_name = "opencv_frame_{}.png".format(img_counter)
+        cv2.imwrite(img_name, frame)
+        print("{} written!".format(img_name))
+        img_counter += 1
 
-def show_frame():
+cam.release()
 
-    if cam_on:
-
-        ret, frame = cap.read()    
-
-        if ret:
-            cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)    
-            img = Image.fromarray(cv2image).resize((810,640))
-            imgtk = ImageTk.PhotoImage(image=img)        
-            vid_lbl.imgtk = imgtk    
-            vid_lbl.configure(image=imgtk)    
-        
-        vid_lbl.after(10, show_frame)
-
-def start_vid():
-    global cam_on, cap
-    stop_vid()
-    cam_on = True
-    cap = cv2.VideoCapture(0) 
-    show_frame()
-
-def stop_vid():
-    global cam_on
-    cam_on = False
-    
-    if cap:
-        cap.release()
-
-vid_lbl = Label(mainFrame)
-vid_lbl.grid(row=0, column=0)
-
-#Buttons
-TurnCameraOn = Button(cameraFrame, text="start Video", bg = "blue", command=start_vid)
-TurnCameraOn.place(x = 0, y = 0)
-TurnCameraOff = Button(cameraFrame, text="stop Video", bg = "blue", command=stop_vid)
-TurnCameraOff.place(x = 0, y = 300)
-
-mainWindow.mainloop()
+cv2.destroyAllWindows()

@@ -8,6 +8,7 @@ app_window = tk.Tk()
 app_window.geometry("410x330")  # Size of the window 
 app_window.title('VULTURE')
 app_font=('calibri', 18, 'bold')
+
 line1 = tk.Label(app_window,text='Upload Files & display',width=30,font=app_font)  
 line1.grid(row=1,column=1,columnspan=4)
 button = tk.Button(app_window, text='Upload Files', width=20,command = lambda:upload_file())
